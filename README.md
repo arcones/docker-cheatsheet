@@ -1,28 +1,50 @@
 # docker-cheatsheet
 
-## About docker installation
+## Docker system commands
 
 ```bash
+# About docker installation, also provides images & containers counters
 docker info
 ```
 
-It will report, among other things:
-
-- Info about how many containers are running, paused, stopped
-- How many images are in the system
-- The docker engine version and license
-- The logging, cgroups drivers in use
-- From where docker is running
-- Information about the host machine
-
-## Run a container
+## Container management
 
 ```bash
-docker run -i -t ubuntu /bin/bash
+## Run a container in the foreground attaching an interactive shell to it
+docker run --name mini_linux -i -t alpine /bin/sh
 ```
 
-In this command:
+```bash
+## Run a daemonized container in the background
+docker run --name greeting_daemon -d alpine /bin/sh -c "while true; do echo hello world; sleep 1; done"
+```
 
-- `-i` flag keeps STDIN open for the container
-- `-t` flag assign a pseudo-tty to the container
-- The combination `-i -t` or `-it` provides an interactive shell in the new container
+```bash
+# Start an stopped container
+docker start mini_linux
+```
+
+```bash
+# Reopen the interactive session in a running container
+docker attach greeting_daemon
+```
+
+```bash
+# Show logs of a running container with timestamps
+docker logs -tf greeting_daemon
+```
+
+```bash
+# Inspect container processes
+docker top greeting_daemon
+```
+
+```bash
+# Running a process inside an already running container
+docker exec -d greeting_daemon echo "hello" >> myFile
+```
+
+```bash
+# Stop a running container
+docker stop greeting_daemon
+```
