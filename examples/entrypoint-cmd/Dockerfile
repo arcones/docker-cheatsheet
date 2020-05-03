@@ -8,6 +8,8 @@ RUN echo "Hello from ubuntu container" > /var/www/html/index.html
 
 EXPOSE 80
 
+# This command will run always
 ENTRYPOINT ["/usr/sbin/nginx"]
 
+# This is the default arg for ENTRYPOINT and can be easily overriden
 CMD ["-h"]
