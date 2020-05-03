@@ -240,24 +240,94 @@ WORKDIR /opt/webapp
 #### ENV
 
 ```bash
+
+# Just one environment variable
 ENV TERRAFORM_VERSION 0.12.24
+
+# Several at once
+ENV SIMPLE=yes ONE_WITH_SPACES="I have spaces"
+
+# Then, they can be user
+CMD echo $TERRAFORM_VERSION
 ```
 
 - To set environment variables for later Dockerfile instructions and runtime
 - Subsequent `RUN` instructions will be prepended by `TERRAFORM_VERSION=0.12.24` assignment
-- Several environment variables can be assigned at one with `ENV SIMPLE=yes ONE_WITH_SPACES="I have spaces"`
-- Subsequent instructions on Dockerfile can use the environment variables with dollar sign as `$TERRAFORM_VERSION`
 - Environment variables can be passed or overwritten in runtime with `docker run -e "WEB_PORT=8080" ...`
 
 #### USER
 
 ```bash
+# Specifying the user
 USER tuki
+
+# Specifying user and group (to avoid ambiguity)
+USER tuki:awesomepeople
+
+# Specifying user and group with IDs
+USER 1000:1001
 ```
 
 - Specified the user that will run the image
-- It can also be specified the group with syntax `user:group`
-- User or group can be specified by its ID instead of the name
+- User and/or group can be specified by its ID instead of the name
 - Defaults to `root`
 
 #### VOLUME
+
+```bash
+VOLUME ["/opt/project"]
+```
+
+- Volumes map a path inside the container with a path in the host
+
+//TODOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!
+
+#### ADD
+
+```bash
+# Original files or folders should be inside the build context
+ADD someFile.o bin/
+
+# Jar file will be downloaded into bucket folder
+ADD https://dl.bintray.com/ptrthomas/karate/karate-0.9.2.jar bucket/
+
+# Tarball will be automatically unpacked with -x option, i.e, no overwrites & result will be the union
+# of what was in destination before and extracted files from tarball
+ADD latest.tar.gz /var/www/
+```
+
+- For copying files inside the docker container in build phase
+- Has also enhanced capabilities to download files from websites and unpack tarballs
+
+#### COPY
+
+```bash
+# Original files or folders should be inside the build context
+COPY someDir/ bin/
+```
+
+- For copying files inside the docker container in build phase
+- Focused on local files, no enhancements like `ADD`
+- If origin ends with `/` it is considered a directory and will be copied with all its contents inside destination path
+- If destination path doesn't exist, `mkdir -p` will be executed to create it
+
+#### LABEL
+
+```bash
+# One label at a time
+LABEL version="0.0.1"
+
+# Several labels at once to avoid several layers creation
+LABEL location="Ciudad de los Ángeles" type="Data Center" role="database"
+```
+
+- Labels store metadata about the image and therefore, the container
+- Labels of an image or container can be checked with `docker inspect container-or-image-name`
+
+#### STOPSIGNAL
+
+```bash
+
+```
+
+- 
