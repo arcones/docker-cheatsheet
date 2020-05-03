@@ -279,8 +279,7 @@ VOLUME ["/opt/project"]
 ```
 
 - Volumes map a path inside the container with a path in the host
-
-//TODOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!
+- [] TODO Complete info!
 
 #### ADD
 
