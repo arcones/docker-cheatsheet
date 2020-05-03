@@ -198,3 +198,66 @@ docker run -d -p 8080:80 --name static_web arcones/static_web:0.0.1 nginx -g "da
 ```bash
 docker run -d -p 127.0.0.1:8080:80 --name static_web arcones/static_web:0.0.1 nginx -g "daemon off;"
 ```
+
+### Dockerfile instructions
+
+#### ENTRYPOINT
+
+```bash
+ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
+```
+
+- Specify the command to run when `docker run` is invoked
+- Any args passed to `docker run` will be appended to the entrypoint
+- Instruction will be prepended by `bin/sh -c` so array syntax is preferred
+
+#### CMD
+
+```bash
+CMD ["/bin/bash", "-l"]
+```
+
+- Specify the default command to run when `docker run` is invoked
+- Will be overwritten by args passed to `docker run`
+- Instruction will be prepended by `bin/sh -c` so array syntax is preferred
+
+##### ENTRYPOINT and CMD combination
+
+For base images
+
+See [this example](examples/entrypoint-cmd/Dockerfile)
+
+#### WORKDIR
+
+```bash
+WORKDIR /opt/webapp
+```
+
+- Change the directory in build phase
+- Can be used several times within the Dockerfile
+- Can be overwritten in runtime with `docker run -w /alternative/workdir ...`
+
+#### ENV
+
+```bash
+ENV TERRAFORM_VERSION 0.12.24
+```
+
+- To set environment variables for later Dockerfile instructions and runtime
+- Subsequent `RUN` instructions will be prepended by `TERRAFORM_VERSION=0.12.24` assignment
+- Several environment variables can be assigned at one with `ENV SIMPLE=yes ONE_WITH_SPACES="I have spaces"`
+- Subsequent instructions on Dockerfile can use the environment variables with dollar sign as `$TERRAFORM_VERSION`
+- Environment variables can be passed or overwritten in runtime with `docker run -e "WEB_PORT=8080" ...`
+
+#### USER
+
+```bash
+USER tuki
+```
+
+- Specified the user that will run the image
+- It can also be specified the group with syntax `user:group`
+- User or group can be specified by its ID instead of the name
+- Defaults to `root`
+
+#### VOLUME
